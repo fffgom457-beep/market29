@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NFT Store</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --tg-theme-bg-color: #1c1c1d;
+            --tg-theme-text-color: #ffffff;
+            --tg-theme-secondary-bg-color: #2c2c2e;
+            --tg-theme-button-color: #007aff;
+            --tg-theme-button-text-color: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .nft-card {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nft-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: linear-gradient(45deg, #2c2c2e, #3a3a3c);
+            display: block;
+        }
+
+        .nft-content {
+            padding: 16px;
+        }
+
+        .nft-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+        }
+
+        .nft-desc {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-bottom: 16px;
+        }
+
+        .buy-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            gap: 8px;
+        }
+
+        .star-icon {
+            width: 18px;
+            height: 18px;
+            background: #f8a917;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Карточка товара 1 -->
+    <div class="nft-card">
+        <img src="https://via.placeholder.com/400" class="nft-image" alt="NFT">
+        <div class="nft-content">
+            <div class="nft-title">Dogge #001</div>
+            <div class="nft-desc">Exclusive Telegram NFT Collection</div>
+            <button class="buy-button" onclick="pay('URL_ССЫЛКА_НА_ОПЛАТУ_1')">
+                <div class="star-icon"></div>
+                Купить за 50
+            </button>
+        </div>
+    </div>
+
+    <!-- Карточка товара 2 -->
+    <div class="nft-card">
+        <img src="https://via.placeholder.com/400" class="nft-image" alt="NFT">
+        <div class="nft-content">
+            <div class="nft-title">Crypto Cat #42</div>
+            <div class="nft-desc">Rare digital collectible cat</div>
+            <button class="buy-button" onclick="pay('URL_ССЫЛКА_НА_ОПЛАТУ_2')">
+                <div class="star-icon"></div>
+                Купить за 150
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+
+        function pay(invoiceUrl) {
+            if (!invoiceUrl || invoiceUrl.includes('URL_ССЫЛКА')) {
+                alert('Нужно вставить реальную ссылку на оплату!');
+
+return;
+            }
+            // Вызывает нативное окно оплаты звездами
+            tg.openInvoice(invoiceUrl, function(status) {
+                if (status === 'paid') {
+                    tg.showAlert("Готово! NFT куплен.");
+                    tg.close();
+                } else if (status === 'cancelled') {
+                    tg.showScanQrPopup("Оплата отменена");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
